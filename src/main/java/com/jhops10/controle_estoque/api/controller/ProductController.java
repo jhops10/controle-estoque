@@ -41,6 +41,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.getItemsUnderQuantity(limit));
     }
 
+    @GetMapping("/low-stock")
+    public ResponseEntity<List<Product>> getProductsWithLowStock() {
+        return ResponseEntity.ok(productService.getProductsWithLowStock());
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDTO dto) {
         return ResponseEntity.ok(productService.updateProduct(id, dto));

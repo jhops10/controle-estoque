@@ -4,8 +4,10 @@ import com.jhops10.controle_estoque.api.dto.StockMovementDTO;
 import com.jhops10.controle_estoque.domain.model.MovementType;
 import com.jhops10.controle_estoque.domain.model.Product;
 import com.jhops10.controle_estoque.domain.model.StockMovement;
+import com.jhops10.controle_estoque.domain.model.StockNotification;
 import com.jhops10.controle_estoque.domain.repository.ProductRepository;
 import com.jhops10.controle_estoque.domain.repository.StockMovementRepository;
+import com.jhops10.controle_estoque.domain.repository.StockNotificationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,12 @@ public class StockMovementService {
 
     private final StockMovementRepository stockMovementRepository;
     private final ProductRepository productRepository;
+    private final StockNotificationRepository stockNotificationRepository;
 
-    public StockMovementService(StockMovementRepository stockMovementRepository, ProductRepository productRepository) {
+    public StockMovementService(StockMovementRepository stockMovementRepository, ProductRepository productRepository, StockNotificationRepository stockNotificationRepository) {
         this.stockMovementRepository = stockMovementRepository;
         this.productRepository = productRepository;
+        this.stockNotificationRepository = stockNotificationRepository;
     }
 
     @Transactional
@@ -52,7 +56,14 @@ public class StockMovementService {
         StockMovement savedMovement = stockMovementRepository.save(stockMovement);
 
         if (product.getMinimumStock() != null && product.getQuantity() < product.getMinimumStock()) {
-            System.out.printf("Alerta: Produto '%s' abaixo do estoque mínimo (%d unidades)", product.getName(), product.getQuantity());
+            String message = String.format("Alerta: Produto '%s' abaixo do estoque mínimo (%d unidades)", product.getName(), product.getQuantity());
+
+            StockNotification notification = new StockNotification();
+            notification.setProduct(product);
+            notification.setMessage(message);
+            notification.setDate(LocalDateTime.now());
+
+            stockNotificationRepository.save(notification);
         }
 
         return savedMovement;
