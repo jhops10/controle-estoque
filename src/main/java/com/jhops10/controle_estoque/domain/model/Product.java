@@ -28,16 +28,20 @@ public class Product {
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 
+
+    private Integer minimumStock;
+
     public Product() {
     }
 
-    public Product(Long id, String name, String description, Integer quantity, BigDecimal price, Supplier supplier) {
+    public Product(Long id, String name, String description, Integer quantity, BigDecimal price, Supplier supplier, Integer minimumStock) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;
         this.supplier = supplier;
+        this.minimumStock = minimumStock;
     }
 
     public Long getId() {
@@ -86,5 +90,13 @@ public class Product {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public Integer getMinimumStock() {
+        return minimumStock;
+    }
+
+    public void setMinimumStock(Integer minimumStock) {
+        this.minimumStock = minimumStock;
     }
 }

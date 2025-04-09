@@ -33,6 +33,7 @@ public class ProductService {
         product.setQuantity(dto.quantity());
         product.setPrice(dto.price());
         product.setSupplier(supplier);
+        product.setMinimumStock(dto.minimumStock());
 
         return productRepository.save(product);
     }

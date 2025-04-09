@@ -23,6 +23,9 @@ public record ProductDTO(
         BigDecimal price,
 
         @NotNull(message = "O Id do fornecedor é um campo obrigatório.")
-        Long supplierId
+        Long supplierId,
+
+        @Min(0)
+        Integer minimumStock
 ) {
 }
