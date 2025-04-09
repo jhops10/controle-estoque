@@ -20,11 +20,13 @@ public class StockMovementService {
     private final StockMovementRepository stockMovementRepository;
     private final ProductRepository productRepository;
     private final StockNotificationRepository stockNotificationRepository;
+    private final EmailService emailService;
 
-    public StockMovementService(StockMovementRepository stockMovementRepository, ProductRepository productRepository, StockNotificationRepository stockNotificationRepository) {
+    public StockMovementService(StockMovementRepository stockMovementRepository, ProductRepository productRepository, StockNotificationRepository stockNotificationRepository, EmailService emailService) {
         this.stockMovementRepository = stockMovementRepository;
         this.productRepository = productRepository;
         this.stockNotificationRepository = stockNotificationRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -63,6 +65,13 @@ public class StockMovementService {
             notification.setMessage(message);
             notification.setDate(LocalDateTime.now());
 
+
+            emailService.sendEmail(
+                    "email@email.com",
+                    "⚠️ Estoque Baixo - " + product.getName(),
+                    "O produto '" + product.getName() + "' está com estoque abaixo do mínimo. \n" +
+                            "Estoque atual: " + product.getQuantity() + "\nEstoque mínimo: " + product.getMinimumStock()
+            );
             stockNotificationRepository.save(notification);
         }
 
