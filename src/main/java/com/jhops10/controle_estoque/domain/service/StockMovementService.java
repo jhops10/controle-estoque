@@ -48,7 +48,14 @@ public class StockMovementService {
         stockMovement.setUnitPrice(dto.getUnitValue());
         stockMovement.setDate(LocalDateTime.now());
 
-        return stockMovementRepository.save(stockMovement);
+
+        StockMovement savedMovement = stockMovementRepository.save(stockMovement);
+
+        if (product.getMinimumStock() != null && product.getQuantity() < product.getMinimumStock()) {
+            System.out.printf("Alerta: Produto '%s' abaixo do estoque mínimo (%d unidades)", product.getName(), product.getQuantity());
+        }
+
+        return savedMovement;
 
     }
 }
