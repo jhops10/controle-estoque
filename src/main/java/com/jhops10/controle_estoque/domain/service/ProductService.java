@@ -74,5 +74,9 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("Produto com o id " + id + " não encontrado."));
     }
 
+    public List<Product> getProductsWithLowStock() {
+        return productRepository.findProductsWithLowStock();
+    }
+
 
 }
