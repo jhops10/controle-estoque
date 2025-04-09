@@ -35,22 +35,6 @@ API RESTful desenvolvida para gerenciar produtos e enviar **notificações por e
 
 ---
 
-## 🧪 Exemplo de JSON para cadastro de produto
-
-```json
-POST /api/products
-
-{
-  "name": "Fone XPTO",
-  "description": "Fone XPTO. Ideal para ouvir as suas músicas preferidas.",
-  "quantity": 7,
-  "price": 150,
-  "supplierId": 1,
-  "minimumStock": 5
-}
-```
----
-
 ## 📄 Como rodar o projeto localmente
 
 ### ⚙️ Passos
@@ -69,4 +53,31 @@ cd controle-estoque
 
 # 4. Execute o projeto com Maven
 mvnw spring-boot:run
+```
+---
+
+## 📚 Documentação (Swagger)
+Esta API possui uma interface interativa gerada automaticamente com o Swagger UI, permitindo visualizar e testar todos os endpoints diretamente pelo navegador.
+
+🔗 Após rodar o projeto localmente, acesse:
+
+http://localhost:8080/swagger-ui.html
+
+---
+
+## 🧪 Exemplo de JSON para cadastro de produto
+
+```json
+POST /api/products
+
+{
+  "name": "Fone XPTO",
+  "description": "Fone XPTO. Ideal para ouvir as suas músicas preferidas.",
+  "quantity": 7,
+  "price": 150,
+  "supplierId": 1,
+  "minimumStock": 5
+}
+```
+
 
