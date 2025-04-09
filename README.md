@@ -65,19 +65,96 @@ http://localhost:8080/swagger-ui.html
 
 ---
 
-## 🧪 Exemplo de JSON para cadastro de produto
+---
+
+## 📌 Alguns Exemplos de Uso da API
+
+### 🔸 Cadastrar Produto
+`POST /api/products`
 
 ```json
-POST /api/products
-
 {
   "name": "Fone XPTO",
-  "description": "Fone XPTO. Ideal para ouvir as suas músicas preferidas.",
+  "description": "Ideal para ouvir músicas.",
   "quantity": 7,
   "price": 150,
   "supplierId": 1,
   "minimumStock": 5
 }
 ```
+
+### 🔸 Consultar Notificações
+`GET /api/notifications`
+
+```json
+[
+  {
+    "id": 1,
+    "productName": "Mouse ABC",
+    "message": "Produto abaixo do estoque mínimo"
+  }
+]
+```
+
+### 🔸 Atualizar Produto
+`PUT /api/products/{id}`
+
+```json
+{
+  "name": "Fone Atualizado",
+  "quantity": 15,
+  "price": 199.99,
+  "supplierId": 1,
+  "minimumStock": 5
+}
+```
+
+### 🔸 Listar Produtos
+`GET /api/products`
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Notebook XPTO",
+        "description": "Um excelente notbook, na cor preta com 16gb de memória. Ideal para trabalhar com programação.",
+        "quantity": 5,
+        "price": 1400.50,
+        "supplier": {
+            "id": 1,
+            "name": "Fornecedor XPTO",
+            "email": "contato@xpto.com"
+        },
+        "minimumStock": 5
+    },
+    {
+        "id": 2,
+        "name": "Mousepad XPTO",
+        "description": "Mousepad preto com logo. Ideal para jogos de fps.",
+        "quantity": 2,
+        "price": 75.90,
+        "supplier": {
+            "id": 1,
+            "name": "Fornecedor XPTO",
+            "email": "contato@xpto.com"
+        },
+        "minimumStock": 5
+    },
+    {
+        "id": 3,
+        "name": "Fone XPTO",
+        "description": "Fone XPTO. Ideal para ouvir as suas músicas preferidas.",
+        "quantity": 4,
+        "price": 150.00,
+        "supplier": {
+            "id": 1,
+            "name": "Fornecedor XPTO",
+            "email": "contato@xpto.com"
+        },
+        "minimumStock": 5
+    }
+]
+```
+---
 
 
