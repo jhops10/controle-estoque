@@ -5,7 +5,8 @@ import com.jhops10.controle_estoque.domain.model.Product;
 import com.jhops10.controle_estoque.domain.model.Supplier;
 import com.jhops10.controle_estoque.domain.repository.ProductRepository;
 import com.jhops10.controle_estoque.domain.repository.SupplierRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.jhops10.controle_estoque.exceptions.ProductNotFoundException;
+import com.jhops10.controle_estoque.exceptions.SupplierNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class ProductService {
     @Transactional
     public Product registerProduct(ProductDTO dto) {
         Supplier supplier = supplierRepository.findById(dto.supplierId())
-                .orElseThrow(() -> new EntityNotFoundException("Fornecedor com o id " + dto.supplierId() + " não encontrado."));
+                .orElseThrow(() -> new SupplierNotFoundException("Fornecedor com o id " + dto.supplierId() + " não encontrado."));
 
         Product product = new Product();
         product.setName(dto.name());
@@ -43,7 +44,7 @@ public class ProductService {
         Product product = findProductById(id);
 
         Supplier supplier = supplierRepository.findById(dto.supplierId())
-                .orElseThrow(() -> new EntityNotFoundException("Fornecedor com id " + dto.supplierId() + " não encontrado."));
+                .orElseThrow(() -> new SupplierNotFoundException("Fornecedor com id " + dto.supplierId() + " não encontrado."));
 
 
         product.setName(dto.name());
@@ -71,7 +72,7 @@ public class ProductService {
 
     public Product findProductById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto com o id " + id + " não encontrado."));
+                .orElseThrow(() -> new ProductNotFoundException("Produto com o id " + id + " não encontrado."));
     }
 
     public List<Product> getProductsWithLowStock() {
