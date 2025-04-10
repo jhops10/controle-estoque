@@ -8,7 +8,8 @@ import com.jhops10.controle_estoque.domain.model.StockNotification;
 import com.jhops10.controle_estoque.domain.repository.ProductRepository;
 import com.jhops10.controle_estoque.domain.repository.StockMovementRepository;
 import com.jhops10.controle_estoque.domain.repository.StockNotificationRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.jhops10.controle_estoque.exceptions.InsufficientStockException;
+import com.jhops10.controle_estoque.exceptions.ProductNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -32,11 +33,11 @@ public class StockMovementService {
     @Transactional
     public StockMovement registerMovement(StockMovementDTO dto) {
         Product product = productRepository.findById(dto.getProductId())
-                .orElseThrow(() -> new EntityNotFoundException("Produto com o id " + dto.getProductId() + " não encontrado"));
+                .orElseThrow(() -> new ProductNotFoundException("Produto com o id " + dto.getProductId() + " não encontrado"));
 
 
         if (dto.getType() == MovementType.OUTGOING && product.getQuantity() < dto.getQuantity()) {
-            throw new IllegalArgumentException("Quantidade insuficiente no estoque para saída.");
+            throw new InsufficientStockException("Quantidade insuficiente no estoque para saída.");
         }
 
         if (dto.getType() == MovementType.INCOMING) {
