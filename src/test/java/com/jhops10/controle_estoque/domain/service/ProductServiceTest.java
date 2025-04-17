@@ -129,4 +129,24 @@ class ProductServiceTest {
         verify(supplierRepository).findById(SUPPLIER.getId());
         verifyNoMoreInteractions(productRepository);
     }
+
+    @Test
+    void shouldDeleteProductSuccessfully() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(PRODUCT));
+
+        productService.deleteProduct(PRODUCT_ID);
+
+        verify(productRepository).findById(PRODUCT_ID);
+        verify(productRepository).deleteById(PRODUCT_ID);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExistingProduct() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(PRODUCT_ID));
+
+        verify(productRepository).findById(PRODUCT_ID);
+        verifyNoMoreInteractions(productRepository);
+    }
 }
