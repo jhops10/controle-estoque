@@ -16,6 +16,8 @@ import org.mockito.internal.matchers.InstanceOf;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -148,5 +150,30 @@ class ProductServiceTest {
 
         verify(productRepository).findById(PRODUCT_ID);
         verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    void shouldReturnAllProducts() {
+        when(productRepository.findAll()).thenReturn(PRODUCT_LIST);
+
+        List<Product> sut = productService.findAllProducts();
+
+        assertNotNull(sut);
+        assertEquals(1, sut.size());
+        assertEquals("Produto Teste", sut.get(0).getName());
+
+        verify(productRepository).findAll();
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoProductsExist() {
+        when(productRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<Product> sut = productService.findAllProducts();
+
+        assertNotNull(sut);
+        assertTrue(sut.isEmpty());
+
+        verify(productRepository).findAll();
     }
 }
