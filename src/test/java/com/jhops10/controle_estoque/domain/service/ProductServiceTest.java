@@ -1,12 +1,12 @@
 package com.jhops10.controle_estoque.domain.service;
 
-import static com.jhops10.controle_estoque.common.ProductConstants.PRODUCT_DTO;
+import static com.jhops10.controle_estoque.common.ProductConstants.*;
 import static com.jhops10.controle_estoque.common.SupplierConstants.SUPPLIER;
-import static com.jhops10.controle_estoque.common.ProductConstants.PRODUCT;
 
 import com.jhops10.controle_estoque.domain.model.Product;
 import com.jhops10.controle_estoque.domain.repository.ProductRepository;
 import com.jhops10.controle_estoque.domain.repository.SupplierRepository;
+import com.jhops10.controle_estoque.exceptions.ProductNotFoundException;
 import com.jhops10.controle_estoque.exceptions.SupplierNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,9 +47,9 @@ class ProductServiceTest {
         assertEquals("Descrição Teste", sut.getDescription());
         assertEquals(5, sut.getQuantity());
         assertEquals(new BigDecimal("10.00"), sut.getPrice());
-        assertEquals(1L, sut.getSupplier().getId());
+        assertEquals(PRODUCT_ID, sut.getSupplier().getId());
 
-        verify(supplierRepository).findById(1L);
+        verify(supplierRepository).findById(PRODUCT_ID);
         verify(productRepository).save(any(Product.class));
     }
 
@@ -63,5 +63,27 @@ class ProductServiceTest {
         verifyNoInteractions(productRepository);
     }
 
-    
+    @Test
+    void shouldReturnProductWhenIdExists() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(PRODUCT));
+
+        Product sut = productService.findProductById(PRODUCT_ID);
+
+        assertEquals("Produto Teste", sut.getName());
+        assertEquals("Descrição Teste", sut.getDescription());
+        assertEquals(5, sut.getQuantity());
+        assertEquals(new BigDecimal("10.00"), sut.getPrice());
+        assertEquals(1L, sut.getSupplier().getId());
+
+        verify(productRepository).findById(PRODUCT_ID);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenProductIdDoesNotExist() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(ProductNotFoundException.class, () -> productService.findProductById(PRODUCT_ID));
+
+        verify(productRepository).findById(PRODUCT_ID);
+    }
 }
