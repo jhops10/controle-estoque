@@ -86,4 +86,47 @@ class ProductServiceTest {
 
         verify(productRepository).findById(PRODUCT_ID);
     }
+
+
+    @Test
+    void shouldUpdateProductSuccessfully() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(PRODUCT));
+        when(supplierRepository.findById(anyLong())).thenReturn(Optional.of(SUPPLIER));
+        when(productRepository.save(any(Product.class))).thenReturn(PRODUCT);
+
+        Product sut = productService.updateProduct(PRODUCT.getId(), PRODUCT_DTO);
+
+        assertNotNull(sut);
+        assertEquals("Produto Teste", sut.getName());
+        assertEquals("Descrição Teste", sut.getDescription());
+        assertEquals(5, sut.getQuantity());
+        assertEquals(new BigDecimal("10.00"), sut.getPrice());
+        assertEquals(1L, sut.getSupplier().getId());
+
+        verify(productRepository).findById(PRODUCT_ID);
+        verify(supplierRepository).findById(SUPPLIER.getId());
+        verify(productRepository).save(any(Product.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenProductToUpdateNotFound() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(PRODUCT_ID, PRODUCT_DTO));
+
+        verify(productRepository).findById(PRODUCT_ID);
+        verifyNoInteractions(supplierRepository);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenSupplierNotFoundOnUpdate() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(PRODUCT));
+        when(supplierRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(SupplierNotFoundException.class, () -> productService.updateProduct(PRODUCT_ID, PRODUCT_DTO));
+
+        verify(productRepository).findById(PRODUCT_ID);
+        verify(supplierRepository).findById(SUPPLIER.getId());
+        verifyNoMoreInteractions(productRepository);
+    }
 }
