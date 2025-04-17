@@ -176,4 +176,30 @@ class ProductServiceTest {
 
         verify(productRepository).findAll();
     }
+
+    @Test
+    void shouldReturnAllProductsWithLowStock() {
+        when(productRepository.findProductsWithLowStock()).thenReturn(PRODUCT_LIST);
+
+        List<Product> sut = productService.getProductsWithLowStock();
+
+        assertNotNull(sut);
+        assertEquals(1, sut.size());
+        assertEquals("Produto Teste", sut.get(0).getName());
+
+        verify(productRepository).findProductsWithLowStock();
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoProductsWithLowStockExist() {
+        when(productRepository.findProductsWithLowStock()).thenReturn(Collections.emptyList());
+
+        List<Product> sut = productService.getProductsWithLowStock();
+
+        assertNotNull(sut);
+        assertTrue(sut.isEmpty());
+
+        verify(productRepository).findProductsWithLowStock();
+    }
+
 }
