@@ -202,4 +202,29 @@ class ProductServiceTest {
         verify(productRepository).findProductsWithLowStock();
     }
 
+    @Test
+    void shouldReturnAllProductsWithQuantityLessThan() {
+        when(productRepository.findByQuantityLessThan(anyInt())).thenReturn(PRODUCT_LIST);
+
+        List<Product> sut = productService.getItemsUnderQuantity(anyInt());
+
+        assertNotNull(sut);
+        assertEquals(1, sut.size());
+        assertEquals("Produto Teste", sut.get(0).getName());
+
+        verify(productRepository).findByQuantityLessThan(anyInt());
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoProductsWithQuantityLessThan() {
+        when(productRepository.findByQuantityLessThan(anyInt())).thenReturn(Collections.emptyList());
+
+        List<Product> sut = productService.getItemsUnderQuantity(anyInt());
+
+        assertNotNull(sut);
+        assertTrue(sut.isEmpty());
+
+        verify(productRepository).findByQuantityLessThan(anyInt());
+    }
+
 }
