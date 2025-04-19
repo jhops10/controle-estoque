@@ -1,7 +1,5 @@
 package com.jhops10.controle_estoque.domain.service;
 
-import static com.jhops10.controle_estoque.common.SupplierConstants.SUPPLIER;
-
 import com.jhops10.controle_estoque.common.SupplierConstants;
 import com.jhops10.controle_estoque.domain.model.Supplier;
 import com.jhops10.controle_estoque.domain.repository.SupplierRepository;
@@ -12,9 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
-import static com.jhops10.controle_estoque.common.SupplierConstants.SUPPLIER_DTO;
+import static com.jhops10.controle_estoque.common.SupplierConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -65,6 +65,33 @@ class SupplierServiceTest {
         assertThrows(SupplierNotFoundException.class, () -> supplierService.getSupplierById(2L));
 
         verify(supplierRepository).findById(anyLong());
+    }
+
+    @Test
+    void shouldReturnAllSuppliers() {
+        when(supplierRepository.findAll()).thenReturn(SUPPLIER_LIST);
+
+        List<Supplier> sut = supplierService.getAllSuppliers();
+
+        assertNotNull(sut);
+        assertEquals(1, sut.size());
+        assertEquals("Fornecedor Teste", sut.get(0).getName());
+        assertEquals("fornecedor@email.com", sut.get(0).getEmail());
+
+        verify(supplierRepository).findAll();
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoSupplierExists() {
+        when(supplierRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<Supplier> sut = supplierService.getAllSuppliers();
+
+        assertNotNull(sut);
+        assertEquals(0, sut.size());
+        assertTrue(sut.isEmpty());
+
+        verify(supplierRepository).findAll();
     }
 
 }
