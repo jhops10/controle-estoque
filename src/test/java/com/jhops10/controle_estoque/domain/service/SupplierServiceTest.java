@@ -45,6 +45,26 @@ class SupplierServiceTest {
         verify(supplierRepository).save(any(Supplier.class));
     }
 
+    @Test
+    void shouldReturnSupplierWhenIdExists() {
+        when(supplierRepository.findById(anyLong())).thenReturn(Optional.of(SUPPLIER));
 
+        Supplier sut = supplierService.getSupplierById(1L);
+
+        assertNotNull(sut);
+        assertEquals("Fornecedor Teste", sut.getName());
+        assertEquals("fornecedor@email.com", sut.getEmail());
+
+        verify(supplierRepository).findById(1L);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenSupplierIdDoesNotExists() {
+        when(supplierRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(SupplierNotFoundException.class, () -> supplierService.getSupplierById(2L));
+
+        verify(supplierRepository).findById(anyLong());
+    }
 
 }
