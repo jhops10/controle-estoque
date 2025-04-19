@@ -16,8 +16,7 @@ import java.util.Optional;
 
 import static com.jhops10.controle_estoque.common.SupplierConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -92,6 +91,28 @@ class SupplierServiceTest {
         assertTrue(sut.isEmpty());
 
         verify(supplierRepository).findAll();
+    }
+
+    @Test
+    void shouldReturnSupplierWhenEmailExists() {
+        when(supplierRepository.findByEmail(anyString())).thenReturn(Optional.of(SUPPLIER));
+
+        Supplier sut = supplierService.getSupplierByEmail("fornecedor@email.com");
+
+        assertNotNull(sut);
+        assertEquals("Fornecedor Teste", sut.getName());
+        assertEquals("fornecedor@email.com", sut.getEmail());
+
+        verify(supplierRepository).findByEmail("fornecedor@email.com");
+    }
+
+    @Test
+    void shouldThrowExceptionWhenSupplierEmailDoesNotExists() {
+        when(supplierRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(SupplierNotFoundException.class, () -> supplierService.getSupplierByEmail("email@email.com"));
+
+        verify(supplierRepository).findByEmail("email@email.com");
     }
 
 }
