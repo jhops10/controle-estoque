@@ -1,0 +1,50 @@
+package com.jhops10.controle_estoque.domain.service;
+
+import static com.jhops10.controle_estoque.common.SupplierConstants.SUPPLIER;
+
+import com.jhops10.controle_estoque.common.SupplierConstants;
+import com.jhops10.controle_estoque.domain.model.Supplier;
+import com.jhops10.controle_estoque.domain.repository.SupplierRepository;
+import com.jhops10.controle_estoque.exceptions.SupplierNotFoundException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
+import static com.jhops10.controle_estoque.common.SupplierConstants.SUPPLIER_DTO;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class SupplierServiceTest {
+
+    @InjectMocks
+    private SupplierService supplierService;
+
+    @Mock
+    private SupplierRepository supplierRepository;
+
+
+    @Test
+    void shouldSaveSupplierWithSuccess() {
+        when(supplierRepository.save(any(Supplier.class))).thenReturn(SUPPLIER);
+
+        Supplier sut = supplierService.registerSupplier(SUPPLIER_DTO);
+
+        assertNotNull(sut);
+        assertEquals(1L, sut.getId());
+        assertEquals("Fornecedor Teste", sut.getName());
+        assertEquals("fornecedor@email.com", sut.getEmail());
+
+        verify(supplierRepository).save(any(Supplier.class));
+    }
+
+
+
+}
