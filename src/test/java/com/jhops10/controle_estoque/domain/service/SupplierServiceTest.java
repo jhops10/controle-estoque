@@ -17,8 +17,7 @@ import java.util.Optional;
 import static com.jhops10.controle_estoque.common.SupplierConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SupplierServiceTest {
@@ -113,6 +112,26 @@ class SupplierServiceTest {
         assertThrows(SupplierNotFoundException.class, () -> supplierService.getSupplierByEmail("email@email.com"));
 
         verify(supplierRepository).findByEmail("email@email.com");
+    }
+
+    @Test
+    void shouldDeleteSupplierSuccessfully() {
+        when(supplierRepository.findById(anyLong())).thenReturn(Optional.of(SUPPLIER));
+
+        supplierService.deleteSupplierById(1L);
+
+        verify(supplierRepository).findById(1L);
+        verify(supplierRepository).deleteById(1L);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExestingSupplier() {
+        when(supplierRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(SupplierNotFoundException.class, () -> supplierService.deleteSupplierById(1L));
+
+        verify(supplierRepository).findById(1L);
+        verifyNoMoreInteractions(supplierRepository);
     }
 
 }
