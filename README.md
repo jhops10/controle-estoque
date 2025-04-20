@@ -16,13 +16,15 @@ API RESTful desenvolvida para gerenciar produtos e enviar **notificações por e
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Java 17**  
+- **Java 17**
+- **MySQL**
+- **MailTrap** (para simular envio de e-mails)  
+- **Spring Mail (JavaMailSender)**
+- **JUnit**
+- **Mockito**
 - **Spring Boot 3**  
 - **Spring Data JPA**  
 - **Spring Validation**  
-- **Spring Mail (JavaMailSender)**  
-- **MySQL**  
-- **MailTrap** (para simular envio de e-mails)  
 - **Maven**
 
 ---
