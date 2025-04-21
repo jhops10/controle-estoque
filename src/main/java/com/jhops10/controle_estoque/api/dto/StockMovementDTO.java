@@ -20,6 +20,15 @@ public class StockMovementDTO {
     @NotNull(message = "O valor unitário é obrigatório.")
     private BigDecimal unitValue;
 
+    public StockMovementDTO() {
+    }
+
+    public StockMovementDTO(Long productId, MovementType type, Integer quantity, BigDecimal unitValue) {
+        this.productId = productId;
+        this.type = type;
+        this.quantity = quantity;
+        this.unitValue = unitValue;
+    }
 
     public Long getProductId() {
         return productId;
